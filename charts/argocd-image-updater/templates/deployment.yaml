@@ -70,9 +70,15 @@ spec:
           - name: ARGOCD_TOKEN
             valueFrom:
               secretKeyRef:
+              {{ if .Values.config.argocd.createSecrets }}
                 key: argocd.token
                 name: argocd-image-updater-secret
                 optional: true
+              {{ else }}
+                key: {{ .Values.config.argocd.token.key }}
+                name: {{ .Values.config.argocd.token.secretName }}
+                optional: true
+              {{ end }}
           - name: IMAGE_UPDATER_LOGLEVEL
             valueFrom:
               configMapKeyRef:
